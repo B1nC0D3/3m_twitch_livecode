@@ -1,5 +1,7 @@
 import sqlite3
 
+from config import MAX_USERS
+
 TABLE_NAME = 'users'
 DB_NAME = 'db.db'
 
@@ -78,3 +80,38 @@ def get_all_unique_messages_in_session(user_id, session_id):
     '''
 
     return execute_query(query)
+
+
+def get_last_session(user_id):
+    query = f'''
+    SELECT session_id
+    FROM {TABLE_NAME}
+    WHERE user_id = '{user_id}'
+    ORDER BY session_id DESC
+    LIMIT 1
+    '''
+    result = execute_query(query)
+    if not result:
+        return 0
+    return result[0][0]
+
+
+def is_max_amount_of_users():
+    query = f'''
+    SELECT COUNT(DISTINCT user_id)
+    FROM {TABLE_NAME}
+    '''
+    result = execute_query(query)
+    if not result:
+        return False
+    return result[0][0] >= MAX_USERS
+
+
+def is_user_in_db(user_id):
+    query = f'''
+    SELECT user_id
+    FROM {TABLE_NAME}
+    WHERE user_id = '{user_id}'
+    '''
+    result = execute_query(query)
+    return bool(result)

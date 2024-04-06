@@ -12,8 +12,13 @@ TOKENIZER_URL = 'https://llm.api.cloud.yandex.net/foundationModels/v1/tokenize'
 GPT_URL = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion'
 
 GPT_MODEL = 'yandexgpt-lite'
-MAX_TOKENS_IN_SESSION = 1000000000000000
+MAX_TOKENS_IN_SESSION = 500
 MAX_TOKENS_FOR_ANSWER = 200
+MAX_SESSIONS = 3
+MAX_USERS = 3
+
+ADMINS_IDS = [236725960]
+
 HEADERS = {'Authorization': f'Bearer {GPT_TOKEN}'}
 DEFAULT_DATA = {
     "modelUri": f"gpt://{FOLDER_ID}/{GPT_MODEL}/latest",

@@ -1,26 +1,36 @@
 import requests
 from pprint import pprint
-from content import SYSTEM_PROMPT, users_choices
+from content import SYSTEM_PROMPT, users_info, CONTINUE_STORY, END_STORY, Roles, Modes
 from config import DEFAULT_DATA, TOKENIZER_URL, HEADERS, GPT_URL
 
 
-def get_gpt_answer(messages):
+def get_gpt_answer(messages, mode):
     data = DEFAULT_DATA.copy()
     data['messages'] = []
     for message in messages:
         role, content = message
+
+        prompt_additional = CONTINUE_STORY
+        if mode == Modes.END:
+            prompt_additional = END_STORY
+
+        if role == Roles.USER:
+            content += '. ' + prompt_additional
+
         data['messages'].append(
             {'role': role,
              'text': content}
         )
-
+    pprint(data)
     resp = send_request('post', GPT_URL, data)
     pprint(resp)
-    return resp['result']['alternatives'][0]['message']['text']
+    result = resp['result']
+    # Возвращаем текстовый ответ и количество токенов, затраченных на ответ
+    return result['alternatives'][0]['message']['text'], result['usage']['completionTokens']
 
 
 def create_system_prompt(chat_id):
-    user_choices = users_choices[chat_id]
+    user_choices = users_info[chat_id]
     message = (f"\nНапиши начало истории в стиле {user_choices['genre']} "
                f"с главным героем {user_choices['char']}. "
                f"Вот начальный сеттинг: \n{user_choices['setting']}. \n"

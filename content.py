@@ -1,5 +1,18 @@
+from enum import Enum
 
-users_choices = {}
+
+class Roles(str, Enum):
+    SYSTEM = 'system'
+    USER = 'user'
+    ASSISTANT = 'assistant'
+
+
+class Modes(str, Enum):
+    CONTINUE = 'continue'
+    END = 'end'
+
+
+users_info = {}
 
 users_state = {}
 
@@ -23,6 +36,9 @@ CONTENT = {
         'buttons_text': SETTINGS
     }
 }
+
+CONTINUE_STORY = 'Продолжи сюжет в 1-3 предложения и оставь интригу. Не пиши никакой пояснительный текст от себя'
+END_STORY = 'Напиши завершение истории c неожиданной развязкой. Не пиши никакой пояснительный текст от себя'
 
 SYSTEM_PROMPT = (
     "Ты пишешь историю вместе с человеком. "
