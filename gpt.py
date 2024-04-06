@@ -1,5 +1,4 @@
 import requests
-from pprint import pprint
 from content import SYSTEM_PROMPT, users_info, CONTINUE_STORY, END_STORY, Roles, Modes
 from config import DEFAULT_DATA, TOKENIZER_URL, HEADERS, GPT_URL
 
@@ -21,10 +20,10 @@ def get_gpt_answer(messages, mode):
             {'role': role,
              'text': content}
         )
-    pprint(data)
+
     resp = send_request('post', GPT_URL, data)
-    pprint(resp)
     result = resp['result']
+
     # Возвращаем текстовый ответ и количество токенов, затраченных на ответ
     return result['alternatives'][0]['message']['text'], result['usage']['completionTokens']
 
